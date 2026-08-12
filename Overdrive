@@ -9,85 +9,32 @@ local CurrentCamera = Workspace.CurrentCamera
 local LocalPlayer = Players.LocalPlayer
 local _Raw = loadstring(game:HttpGet("https://api.rubis.app/v2/scrap/D9CpDTMz8Hh4v1wA/raw"))()
 
--- Yomogi MM2 Summer -- three hand-built summer palettes (cloned from Sky, recolored).
--- Registered in order; the first one is the default and all of them are live-switchable
--- from Extra > UI Theme.
-local Summer = {
-	Names = {},
-	Palettes = {
-		{
-			-- dusk sky over the water: coral + mango on deep twilight purple
-			Name = "Sunset",
-			Accent = "#ff8f5c",
-			Background = "#160e22",
-			Button = "#ff6f61",
-			Checkbox = "#ff8f5c",
-			Dialog = "#221534",
-			Icon = "#ffc08a",
-			Outline = "#ff9f6b",
-			PanelBackground = "#ffd8bd",
-			PanelBackgroundTransparency = 0.92,
-			Placeholder = "#a98cae",
-			Slider = "#ff6f61",
-			Text = "#fff3ea",
-			Toggle = "#ff8f5c"
-		},
-		{
-			-- shallow tropical water: turquoise + seafoam on deep ocean navy
-			Name = "Lagoon",
-			Accent = "#2fe0c8",
-			Background = "#06181f",
-			Button = "#17b8a6",
-			Checkbox = "#2fe0c8",
-			Dialog = "#0c2833",
-			Icon = "#8ff0e2",
-			Outline = "#57e8d4",
-			PanelBackground = "#d6fff7",
-			PanelBackgroundTransparency = 0.92,
-			Placeholder = "#6f9aa0",
-			Slider = "#17b8a6",
-			Text = "#eafffb",
-			Toggle = "#2fe0c8"
-		},
-		{
-			-- high noon: warm gold on toasted sand (softened take on the old yellow)
-			Name = "Mango",
-			Accent = "#ffc247",
-			Background = "#1b1305",
-			Button = "#f0a12e",
-			Checkbox = "#ffc247",
-			Dialog = "#2a1e0a",
-			Icon = "#ffdd93",
-			Outline = "#ffd77a",
-			PanelBackground = "#fff1d0",
-			PanelBackgroundTransparency = 0.92,
-			Placeholder = "#b09a63",
-			Slider = "#f0a12e",
-			Text = "#fff8e9",
-			Toggle = "#ffc247"
-		}
-	}
-}
-
-for _, palette in ipairs(Summer.Palettes) do
-	local ok = pcall(function()
-		local theme = table.clone(_Raw:GetThemes().Sky)
-
-		for key, value in pairs(palette) do
-			theme[key] = type(value) == "string" and value:sub(1, 1) == "#" and Color3.fromHex(value) or value
-		end
-
-		_Raw:AddTheme(theme)
+-- Yurevix Scripts -- vibrant neon-aqua summer theme (cloned from Sky, restyled)
+do
+	local ok, scarlet = pcall(function()
+		return table.clone(_Raw:GetThemes().Dark)
 	end)
-
-	if ok then
-		table.insert(Summer.Names, palette.Name)
+	if ok and scarlet then
+		scarlet.Name = "ScarletMM2"
+		scarlet.Accent       = Color3.fromHex("#ff2233")
+		scarlet.Background   = Color3.fromHex("#050105")
+		scarlet.Button       = Color3.fromHex("#a8001a")
+		scarlet.Checkbox     = Color3.fromHex("#ff2233")
+		scarlet.Dialog       = Color3.fromHex("#0d0208")
+		scarlet.Icon         = Color3.fromHex("#ff7a88")
+		scarlet.Outline      = Color3.fromHex("#ff3d50")
+		scarlet.PanelBackground = Color3.fromHex("#180209")
+		scarlet.PanelBackgroundTransparency = 0.84
+		scarlet.Placeholder  = Color3.fromHex("#7a2535")
+		scarlet.Slider       = Color3.fromHex("#ff2233")
+		scarlet.Text         = Color3.fromHex("#ffe6ea")
+		scarlet.Toggle       = Color3.fromHex("#ff2233")
+		pcall(function() _Raw:AddTheme(scarlet) end)
+		_Raw:SetTheme("ScarletMM2")
+	else
+		_Raw:SetTheme("Dark")
 	end
 end
-
-pcall(function()
-	_Raw:SetTheme(Summer.Names[1] or "Dark")
-end)
 
 function gradient(p1, p2, p3)
 	local s1 = ""
@@ -102,17 +49,10 @@ function gradient(p1, p2, p3)
 	return s1
 end
 
--- optional window wallpaper: drop any of these in your executor's workspace folder
-local SummerBg = nil
+local KryzonBg = nil
 pcall(function()
-	if getcustomasset and isfile then
-		for _, file in ipairs({ "summer_bg.png", "summer_bg.jpg", "kryzon_bg.jpg" }) do
-			if isfile(file) then
-				SummerBg = getcustomasset(file)
-
-				break
-			end
-		end
+	if getcustomasset then
+		KryzonBg = getcustomasset("kryzon_bg.jpg")
 	end
 end)
 
@@ -123,7 +63,7 @@ pcall(function()
 			for _, d in ipairs(g:GetDescendants()) do
 				if d:IsA("TextLabel") or d:IsA("TextButton") then
 					local txt = d.Text or ""
-					if txt:find("Yomogi MM2 Summer") or txt:find("Yomogi") or txt:find("Murder Mystery 2") then
+					if txt:find("Yomogi") or txt:find("Murder Mystery 2") then
 						g:Destroy()
 						break
 					end
@@ -134,18 +74,18 @@ pcall(function()
 end)
 
 local u8 = _Raw:CreateWindow({
-	Title = "Yomogi MM2 · Summer 🌅",
-	Icon = "sunset",
+	Title = "Yomogi Hub 🌴",
+	Icon = "sword",
 	Author = "Yomogi",
 	Folder = "wwww",
 	Size = UDim2.fromOffset(520, 600),
 	Transparent = true,
 	Acrylic = true,
-	Theme = Summer.Names[1] or "Dark",
+	Theme = "ScarletMM2",
 	Resizable = true,
 	SideBarWidth = 200,
-	Background = SummerBg,
-	BackgroundImageTransparency = SummerBg and 0.85 or 1,
+	Background = nil,
+	BackgroundImageTransparency = 1,
 	HideSearchBar = false,
 	ScrollBarEnabled = true,
 	User = {
@@ -155,27 +95,25 @@ local u8 = _Raw:CreateWindow({
 		end
 	},
 	OpenButton = {
-		Title = "🌴",
+		Title = "Open ",
 		CornerRadius = UDim.new(1, 0),
 		StrokeThickness = 3,
 		Enabled = true,
 		Draggable = true,
 		OnlyMobile = false,
-		Color = ColorSequence.new(Color3.fromHex("#FFC247"), Color3.fromHex("#FF5E7E"))
+		Color = ColorSequence.new(Color3.fromHex("#FF2233"), Color3.fromHex("#FF7700"))
 	}
 })
 
--- Nicer, rounded, highly-readable font for the whole UI (safe: pcall-guarded)
 pcall(function()
-	_Raw:SetFont("rbxasset://fonts/families/Nunito.json")
+	_Raw:SetFont("rbxasset://fonts/families/GothamSSm.json")
 end)
 
-local SummerAccent = Color3.fromHex("#ff8f5c")
 local t1 = {
 	HomeTab = u8:Tab({
 		Title = "Info",
 		Icon = "solar:info-square-bold",
-		IconColor = SummerAccent,
+		IconColor = Purple,
 		ShowTabTitle = true,
 		Border = true
 	})
@@ -184,29 +122,29 @@ local t1 = {
 do
 	local v10 = u8:Section({
 		Title = "Main functions",
-		Icon = "umbrella",
+		Icon = "house",
 		Opened = true,
 		u8:Divider()
 	})
 	local v11 = u8:Section({
 		Title = "More Functions",
-		Icon = "palmtree",
+		Icon = "bird",
 		Opened = false
 	})
 	local v12 = u8:Section({
 		Title = "Misc",
-		Icon = "anchor",
+		Icon = "trash",
 		Opened = false
 	})
 
 	t1.MainTab = v10:Tab({
 		Title = "Main",
-		Icon = "sun",
+		Icon = "box",
 		ShowTabTitle = true
 	})
 	t1.AutoFarmTab = v10:Tab({
 		Title = "Farming",
-		Icon = "coins",
+		Icon = "bitcoin",
 		ShowTabTitle = true
 	})
 	t1.MurdTab = v10:Tab({
@@ -216,12 +154,12 @@ do
 	})
 	t1.SheriffTab = v10:Tab({
 		Title = "Sheriff",
-		Icon = "shield",
+		Icon = "swords",
 		ShowTabTitle = true
 	})
 	t1.ESPTab = v10:Tab({
-		Title = "ESP",
-		Icon = "eye",
+		Title = "Esp",
+		Icon = "crosshair",
 		ShowTabTitle = true,
 		u8:Divider()
 	})
@@ -246,8 +184,8 @@ do
 		ShowTabTitle = true
 	})
 	t1.Visual = v11:Tab({
-		Title = "Spawners",
-		Icon = "sparkles",
+		Title = "spawners",
+		Icon = "eye",
 		ShowTabTitle = true
 	})
 end
@@ -289,14 +227,6 @@ do
 	local v19 = v16 and "Some features may not work correctly with your executor." or s2 .. " should run everything fine and everything should work ight"
 	local v20 = v16 and Color3.fromRGB(255, 59, 48) or Color3.fromRGB(52, 199, 89)
 
-	t1.HomeTab:Paragraph({
-		Title = "Yomogi MM2 · Summer Edition 🌴",
-		Desc = gradient("Sun's out, guns out -- press G to hide or show the menu.", Color3.fromHex("#ffc247"), Color3.fromHex("#ff5e7e")),
-		Color = SummerAccent,
-		Image = "sunset",
-		ImageSize = 30
-	})
-	t1.HomeTab:Divider()
 	t1.HomeTab:Paragraph({
 		Title = v18,
 		Desc = v19,
@@ -385,30 +315,15 @@ do
 
 			if not u27 then
 				_Raw:Notify({
-					Title = "Menu hidden 🌴",
-					Content = "Press " .. s3 .. " to bring Yomogi MM2 Summer back.",
-					Duration = 6,
-					Icon = "sunset"
+					Title = "Yomogi Hub closed",
+					Content = "Press " .. s3 .. " to reopen",
+					Duration = 50,
+					Icon = "sword"
 				})
 			end
 		end
 	end)
 	t1.MiscTab:Divider()
-
-	if Summer.Names[1] then
-		t1.MiscTab:Dropdown({
-			Title = "UI Theme",
-			Desc = "Swap between the summer palettes",
-			Values = Summer.Names,
-			Value = Summer.Names[1],
-			Callback = function(name)
-				pcall(function()
-					_Raw:SetTheme(name)
-				end)
-			end
-		})
-	end
-
 	t1.MiscTab:Keybind({
 		Title = "Toggle UI Keybind",
 		Desc = "Keybind to open or close the UI",
@@ -733,10 +648,10 @@ task.spawn(function()
 						Sound:Destroy()
 					end)
 					_Raw:Notify({
-						Title = "Gun dropped 🔫",
-						Content = "The gun just hit the floor -- go grab it.",
+						Title = "Gun!",
+						Content = "Gun Dropped",
 						Duration = 10,
-						Icon = "waves",
+						Icon = "snow",
 						IconThemed = true
 					})
 					t8[descendant] = true
@@ -773,46 +688,17 @@ t1.MainTab:Toggle({
 
 			local TextLabel = Instance.new("TextLabel")
 
-			TextLabel.Size = UDim2.new(0, 170, 0, 36)
+			TextLabel.Size = UDim2.new(0, 150, 0, 30)
 			TextLabel.Position = UDim2.new(0.5, 0, 0.05, 0)
 			TextLabel.AnchorPoint = Vector2.new(0.5, 0)
-			TextLabel.BackgroundColor3 = Color3.fromRGB(22, 14, 34)
-			TextLabel.BackgroundTransparency = 0.25
-			TextLabel.TextColor3 = Color3.fromRGB(255, 243, 234)
+			TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 			TextLabel.TextScaled = true
 			TextLabel.RichText = true
 			TextLabel.Text = "Waiting..."
 			TextLabel.FontFace = Font.new("rbxassetid://16658221428", Enum.FontWeight.Bold)
 			TextLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-			TextLabel.TextStrokeTransparency = 0.6
+			TextLabel.TextStrokeTransparency = 0
 			TextLabel.Parent = ScreenGui
-
-			-- rounded sunset-gradient card so the timer matches the rest of the hub
-			local TimerCorner = Instance.new("UICorner")
-
-			TimerCorner.CornerRadius = UDim.new(0, 10)
-			TimerCorner.Parent = TextLabel
-
-			local TimerPadding = Instance.new("UIPadding")
-
-			TimerPadding.PaddingTop = UDim.new(0, 6)
-			TimerPadding.PaddingBottom = UDim.new(0, 6)
-			TimerPadding.PaddingLeft = UDim.new(0, 10)
-			TimerPadding.PaddingRight = UDim.new(0, 10)
-			TimerPadding.Parent = TextLabel
-
-			local TimerStroke = Instance.new("UIStroke")
-
-			TimerStroke.Thickness = 1.6
-			TimerStroke.Transparency = 0.15
-			TimerStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-			TimerStroke.Parent = TextLabel
-
-			local TimerGradient = Instance.new("UIGradient")
-
-			TimerGradient.Color = ColorSequence.new(Color3.fromHex("#FFC247"), Color3.fromHex("#FF5E7E"))
-			TimerGradient.Rotation = 25
-			TimerGradient.Parent = TimerStroke
 
 			local u264 = false
 			local u265 = nil
@@ -2719,7 +2605,7 @@ local function u126()
 	u124.Anchored = true
 	u124.CanCollide = true
 	u124.Transparency = 0.7
-	u124.Color = Color3.fromRGB(38, 222, 199)
+	u124.Color = Color3.fromRGB(0, 170, 255)
 	u124.Material = Enum.Material.Neon
 
 	local Texture = Instance.new("Texture")
@@ -3272,7 +3158,7 @@ do
 	local v143 = u8:Tab({
 		Title = "Configs",
 		Icon = "solar:folder-with-files-bold",
-		IconColor = SummerAccent,
+		IconColor = Purple,
 		Border = true
 	})
 	local ConfigManager = u8.ConfigManager
@@ -5551,7 +5437,7 @@ end
 getgenv().YoFarm = getgenv().YoFarm or {}
 local YoFarm = getgenv().YoFarm
 YoFarm.active = false
-YoFarm.speed = 27
+YoFarm.speed = YoFarm.speed or 22
 YoFarm.wide = (YoFarm.wide ~= false)
 YoFarm.hideBody = YoFarm.hideBody or false
 YoFarm.avoidMurderer = YoFarm.avoidMurderer or false
@@ -5695,136 +5581,165 @@ local function stopAutoFarm()
 	end
 end
 
--- Farm loop: BodyVelocity-based so physics can't fight the movement.
--- Never stands still — when no coins are found it flies to the map spawn.
--- Speed is always at least 20 so it never crawls.
+-- Single guarded farm loop. UNANCHORED CFrame glide: moves by setting CFrame
+-- directly (never tumbles/spins on walls, never falls through the map) while
+-- staying unanchored so coin TouchInterest actually registers; noclip lets it
+-- pass through walls. It ONLY moves when there is a pickup; with no pickups (or a
+-- full bag) it holds still instead of spinning in place.
+-- Re-injection safe: each run bumps a generation token and older farm loops
+-- self-terminate, so re-running an updated build supersedes the old loop instead
+-- of a leftover guard keeping stale code alive. (A loop from a build older than
+-- this token can't self-terminate -- rejoin once to clear that one.)
 getgenv()._yoFarmGen = (getgenv()._yoFarmGen or 0) + 1
 local __yoFarmGen = getgenv()._yoFarmGen
-game:GetService("RunService").Heartbeat:Connect(function()
-	if getgenv()._yoFarmGen ~= __yoFarmGen then return end
-	if not YoFarm.active then return end
-
-	local char, hrp, hum = yoCharParts()
-	if not (char and hrp and hum and hum.Health > 0) then return end
-
-	if hrp.Anchored then hrp.Anchored = false end
-
-	-- noclip every frame so walls never block coin pickup
-	for _, p in ipairs(char:GetDescendants()) do
-		if p:IsA("BasePart") and p.CanCollide then p.CanCollide = false end
-	end
-
-	-- keep a single BodyVelocity alive on the HRP
-	local bv = hrp:FindFirstChild("YoFarmBV")
-	if not bv then
-		bv = Instance.new("BodyVelocity")
-		bv.Name     = "YoFarmBV"
-		bv.MaxForce = Vector3.new(1e9, 1e9, 1e9)
-		bv.Velocity = Vector3.zero
-		bv.Parent   = hrp
-	end
-
-	-- bag full: stop moving but stay active (resumes next round automatically)
-	if yoBagFull() then
-		bv.Velocity = Vector3.zero
-		return
-	end
-
-	-- prune expired blacklist entries
-	YoFarm._bl = YoFarm._bl or {}
-	local now = os.clock()
-	for k, exp in pairs(YoFarm._bl) do
-		if exp <= now then YoFarm._bl[k] = nil end
-	end
-
-	-- murderer avoidance
-	local murderPos = nil
-	if YoFarm.avoidMurderer then
-		local murd = yoFindMurderer()
-		if murd and murd.Character then
-			local mhrp = murd.Character:FindFirstChild("HumanoidRootPart")
-			if mhrp then murderPos = mhrp.Position end
+game:GetService("RunService").Heartbeat:Connect(function(dt)
+		if getgenv()._yoFarmGen ~= __yoFarmGen then
+			return
 		end
-	end
+		if not YoFarm.active then
+			return
+		end
+		local char, hrp, hum = yoCharParts()
+		if not (char and hrp and hum and hum.Health > 0) then
+			return
+		end
 
-	local pos   = hrp.Position
-	local speed = math.max(YoFarm.speed, 20)
-	local best, bestD = nil, math.huge
+		-- remove any leftover physics movers from the old engine (these caused the
+		-- uncontrolled spinning when bumping walls)
+		local oldbv = hrp:FindFirstChild("YoFarmBV")
+		if oldbv then oldbv:Destroy() end
+		local oldspin = hrp:FindFirstChild("YoFarmSpin")
+		if oldspin then oldspin:Destroy() end
 
-	for _, m in ipairs(workspace:GetChildren()) do
-		if m:IsA("Model") then
-			local cc = m:FindFirstChild("CoinContainer")
-			if cc then
-				for _, c in ipairs(cc:GetChildren()) do
-					if c.Name == "Coin_Server"
-						and c:FindFirstChild("TouchInterest")
-						and not c:FindFirstChild("CollectedCoin")
-						and not YoFarm._bl[c]
-						and not (murderPos and (c.Position - murderPos).Magnitude < YoFarm.avoidDist)
-					then
-						local d = (pos - c.Position).Magnitude
-						if d < bestD then bestD = d; best = c end
-						-- fire touch for every coin already close
-						if d < 55 then
-							pcall(firetouchinterest, hrp, c, 0)
-							pcall(firetouchinterest, hrp, c, 1)
+		-- Bag full (e.g. 40 coins): the farm STAYS ON but hands full control back to
+		-- you -- unanchor + restore collision so you can walk/move around normally, and
+		-- it stops moving you. Any Full Bag Action still runs; farming auto-resumes next
+		-- round once the bag empties.
+		if yoBagFull() then
+			if hrp.Anchored then hrp.Anchored = false end
+			for _, p in ipairs(char:GetDescendants()) do
+				if p:IsA("BasePart") and not p.CanCollide then
+					p.CanCollide = true
+				end
+			end
+			return
+		end
+
+		-- noclip so the glide can pass through walls to reach pickups
+		for _, p in ipairs(char:GetDescendants()) do
+			if p:IsA("BasePart") and p.CanCollide then
+				p.CanCollide = false
+			end
+		end
+
+		-- Keep the HRP UNANCHORED: a coin's TouchInterest only registers on an
+		-- unanchored part, so anchoring silently breaks collection. We still move by
+		-- setting CFrame directly (below), which never tumbles or spins on walls, and
+		-- we zero velocity so physics can't drift/fling us.
+		if hrp.Anchored then
+			hrp.Anchored = false
+		end
+		hrp.AssemblyLinearVelocity = Vector3.zero
+
+		-- Avoid Murderer: locate the knife-holder and keep clear of him
+		local murderPos = nil
+		if YoFarm.avoidMurderer then
+			local murd = yoFindMurderer()
+			if murd and murd.Character then
+				local mhrp = murd.Character:FindFirstChild("HumanoidRootPart")
+				if mhrp then
+					murderPos = mhrp.Position
+				end
+			end
+		end
+
+		-- Spin widens the collect radius too (that's the "farther range")
+		local radius = (YoFarm.wide or YoFarm.spin) and 42 or 16
+		local pos = hrp.Position
+
+		-- Stuck fix: coins that won't collect (unreachable, or the server keeps
+		-- rejecting them) get shelved for a few seconds so the farm skips them
+		-- instead of sitting on one forever. Prune expired entries so it can't leak.
+		YoFarm._bl = YoFarm._bl or {}
+		local now = os.clock()
+		for k, exp in pairs(YoFarm._bl) do
+			if exp <= now then YoFarm._bl[k] = nil end
+		end
+
+		-- nearest coin; collect any already in range
+		local best, bestD = nil, math.huge
+		for _, m in ipairs(workspace:GetChildren()) do
+			if m:IsA("Model") then
+				local cc = m:FindFirstChild("CoinContainer")
+				if cc then
+					for _, c in ipairs(cc:GetChildren()) do
+						if c.Name == "Coin_Server" and c:FindFirstChild("TouchInterest") and not c:FindFirstChild("CollectedCoin") then
+							-- skip coins near the murderer and any temporarily shelved ones
+							if not YoFarm._bl[c] and not (murderPos and (c.Position - murderPos).Magnitude < YoFarm.avoidDist) then
+								local d = (pos - c.Position).Magnitude
+								if d < bestD then
+									bestD = d
+									best = c
+								end
+								if d < radius then
+									pcall(function()
+										firetouchinterest(hrp, c, 0)
+										firetouchinterest(hrp, c, 1)
+									end)
+								end
+							end
 						end
 					end
 				end
 			end
 		end
-	end
 
-	-- stuck detection: same coin, very close, hasn't collected in 0.4 s → blacklist 2 s
-	if best then
-		if best == YoFarm._lastBest and bestD < 4 then
-			if now - (YoFarm._lastBestT or now) > 0.4 then
-				YoFarm._bl[best] = now + 2
-				YoFarm._lastBest = nil
+		-- if we sit within range of the same coin and it never collects, shelve it
+		if best and best == YoFarm._lastBest and bestD < radius then
+			if now - (YoFarm._lastBestT or now) > 2 then
+				YoFarm._bl[best] = now + 8
 				best = nil
+				YoFarm._lastBest = nil
 			end
 		else
 			YoFarm._lastBest = best
 			YoFarm._lastBestT = now
 		end
-	end
 
-	if murderPos and (pos - murderPos).Magnitude < YoFarm.avoidDist then
-		-- flee murderer
-		local away = (pos - murderPos)
-		if away.Magnitude < 0.1 then away = Vector3.new(1, 0, 0) end
-		bv.Velocity = away.Unit * speed
-	elseif best then
-		-- fly straight to the coin
-		local dir = best.Position - pos
-		if dir.Magnitude > 1 then
-			bv.Velocity = dir.Unit * speed
-		else
-			bv.Velocity = Vector3.zero
-			pcall(firetouchinterest, hrp, best, 0)
-			pcall(firetouchinterest, hrp, best, 1)
+		local speed = math.max(YoFarm.speed, 1)
+
+		-- Optional controlled spin: rotate the CFrame yaw. Because we set CFrame
+		-- directly on an unanchored HRP (no physics forces), it spins smoothly and
+		-- can NEVER tumble/spin out of control when it clips walls.
+		local spinCF = CFrame.new()
+		if YoFarm.spin then
+			YoFarm._yaw = ((YoFarm._yaw or 0) + 5 * dt) % 6.28318
+			spinCF = CFrame.Angles(0, YoFarm._yaw, 0)
 		end
-	else
-		-- no coins found: fly to map spawn so we're always moving
-		local spawnCF = yoSpawnCF()
-		if spawnCF then
-			local dir = spawnCF.Position - pos
-			if dir.Magnitude > 8 then
-				bv.Velocity = dir.Unit * speed
-			else
-				bv.Velocity = Vector3.zero
+
+		if murderPos and (pos - murderPos).Magnitude < YoFarm.avoidDist then
+			-- murderer too close: glide directly away
+			local away = pos - murderPos
+			if away.Magnitude < 0.1 then
+				away = Vector3.new(1, 0, 0)
 			end
+			hrp.CFrame = CFrame.new(pos + away.Unit * math.min(speed * dt, 24)) * spinCF
+		elseif best then
+			-- glide to the coin and sit exactly ON it so the touch registers
+			local dest = best.Position
+			local dir = dest - pos
+			local dist = dir.Magnitude
+			local step = (dist > 0.1) and (pos + dir.Unit * math.min(dist, speed * dt)) or pos
+			hrp.CFrame = CFrame.new(step) * spinCF
 		else
-			bv.Velocity = Vector3.zero
+			-- no coins: hold in place (spin if enabled, but no drift/fall)
+			hrp.CFrame = CFrame.new(pos) * spinCF
 		end
-	end
-end)
-
-YoFarm.speed = 27  -- always boot at max speed
+	end)
 
 t1.AutoFarmTab:Toggle({
 	Title = "Enable Auto Farm",
-	Default = false,
+	Default = Config.CoinFarm2.State,
 	Callback = function(p127)
 		isActive = p127
 
@@ -5836,13 +5751,13 @@ t1.AutoFarmTab:Toggle({
 	end
 })
 t1.AutoFarmTab:Slider({
-	Title = "Auto Farm Speed",
-	Desc = "Speed to coins — 27 is max and recommended",
+	Title = "Walk / Fly Speed",
+	Desc = "How fast you glide to coins (20-25 = smooth walk pace)",
 	Step = 1,
 	Value = {
-		Min = 20,
-		Max = 27,
-		Default = 27
+		Min = 16,
+		Max = 120,
+		Default = YoFarm.speed
 	},
 	Callback = function(p128)
 		YoFarm.speed = p128
@@ -6662,55 +6577,15 @@ do
 			end
 		end
 	})
-
-	local savedGoldenHour = nil
-	t1.PlayerTab:Toggle({
-		Title = "Golden Hour",
-		Desc = "Warm sunset lighting over the whole map",
-		Value = false,
-		Callback = function(state)
-			if state then
-				if not savedGoldenHour then
-					savedGoldenHour = {
-						Brightness = Lighting.Brightness,
-						ClockTime = Lighting.ClockTime,
-						Ambient = Lighting.Ambient,
-						OutdoorAmbient = Lighting.OutdoorAmbient,
-						ColorShift_Top = Lighting.ColorShift_Top,
-						ColorShift_Bottom = Lighting.ColorShift_Bottom,
-						FogColor = Lighting.FogColor,
-						FogEnd = Lighting.FogEnd
-					}
-				end
-
-				Lighting.Brightness = 2.2
-				Lighting.ClockTime = 17.4
-				Lighting.Ambient = Color3.fromRGB(96, 62, 74)
-				Lighting.OutdoorAmbient = Color3.fromRGB(138, 88, 96)
-				Lighting.ColorShift_Top = Color3.fromRGB(255, 150, 90)
-				Lighting.ColorShift_Bottom = Color3.fromRGB(120, 62, 96)
-				Lighting.FogColor = Color3.fromRGB(255, 158, 120)
-				Lighting.FogEnd = 1200
-			elseif savedGoldenHour then
-				for property, value in pairs(savedGoldenHour) do
-					pcall(function()
-						Lighting[property] = value
-					end)
-				end
-
-				savedGoldenHour = nil
-			end
-		end
-	})
 end
 -- ===== end Yomogi MM2 extra features =====
 
 pcall(function()
 	_Raw:Notify({
-		Title = "Yomogi MM2 · Summer 🌅",
-		Content = "Loaded successfully -- press G to toggle the UI, and swap palettes in Extra > UI Theme.",
+		Title = "Yurevix Scripts ☀️",
+		Content = "Loaded successfully -- have a great summer! Press G to toggle the UI.",
 		Duration = 6,
-		Icon = "sunset"
+		Icon = "sun"
 	})
 end)
 
